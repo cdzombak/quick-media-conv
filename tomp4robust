@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -eq 0 ]; then
+	echo "[!] Pass input file names as arguments."
+	exit 2
+fi
+
+for infname in "$@"
+do
+	echo "$infname ..."
+	ffmpeg -i "$infname" -vf "pad=ceil(iw/2)*2:ceil(ih/2)*2" -max_muxing_queue_size 9999 -movflags faststart -pix_fmt yuv420p -preset slow -codec:a aac -codec:v libx264 -b:a 128k -crf 23 "$infname.mp4"
+done

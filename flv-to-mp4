@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -eu
+
+FNAME_NOEXT=`echo "$1" | rev | cut -f 2- -d '.' | rev`
+ffmpeg -i "$1" -c:v libx264 -crf 23 -c:a aac -q:a 100 "$FNAME_NOEXT.mp4"
