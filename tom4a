@@ -9,5 +9,5 @@ fi
 for infname in "$@"
 do
 	echo "$infname ..."
-	ffmpeg -i "$infname" -c:a aac -b:a 320k "$infname.m4a"
+	ffmpeg -i "$infname" -c:a aac -b:a 320k -c:v copy "$infname.m4a"
 done
