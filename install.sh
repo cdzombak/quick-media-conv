@@ -2,11 +2,12 @@
 set -euo pipefail
 
 declare -a SCRIPTS=(
-	"flv-to-mp4"
+	"flv2mp4"
 	"toalac"
+	"tom4a"
 	"tomp4"
-	"tomp4hq"
-	"tomp4robust"
+	"tomp4-hq"
+	"tomp4-robust"
 )
 
 mkdir -p "$HOME/opt/bin"
