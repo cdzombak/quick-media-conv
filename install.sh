@@ -8,6 +8,7 @@ declare -a SCRIPTS=(
 	"tomp4"
 	"tomp4-hq"
 	"tomp4-robust"
+	"topng"
 )
 
 mkdir -p "$HOME/opt/bin"
