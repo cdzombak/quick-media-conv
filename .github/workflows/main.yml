@@ -130,7 +130,8 @@ jobs:
         run: |
           mkdir ./gh-release
           cp ./*.deb ./gh-release/
-          tar czvf ./gh-release/${{ needs.meta.outputs.project_name }}-${{ needs.meta.outputs.bin_version }}-all.tar.gz \
+          tar --transform='flags=r;s|-${{ needs.meta.outputs.bin_version }}-all||' \
+            -czvf ./gh-release/${{ needs.meta.outputs.project_name }}-${{ needs.meta.outputs.bin_version }}-all.tar.gz \
             ./*-${{ needs.meta.outputs.bin_version }}-all
           echo "tgz_sha256_allarch=$(shasum -a 256 ./gh-release/${{ needs.meta.outputs.project_name }}-${{ needs.meta.outputs.bin_version }}-all.tar.gz  | cut -d " " -f 1)" >> "$GITHUB_OUTPUT"
       - name: Upload binaries & packages
