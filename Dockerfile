@@ -1,13 +1,12 @@
-ARG BIN_VERSION=<unknown>
-
 FROM ubuntu:jammy
+ARG BIN_VERSION=<unknown>
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends -y \
-         bash curl ffmpeg imagemagick \
+         ca-certificates curl \
     && curl -s https://packagecloud.io/install/repositories/cdzombak/oss/script.deb.sh?any=true | bash \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends -y \
-         quick-media-conv=${BIN_VERSION} \
+         quick-media-conv="${BIN_VERSION}" ffmpeg imagemagick \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
