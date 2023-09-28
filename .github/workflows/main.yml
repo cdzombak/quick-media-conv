@@ -16,7 +16,7 @@ permissions:
 
 env:
   DOCKERHUB_USERNAME: cdzombak
-  DOCKER_PLATFORMS: "linux/amd64,linux/arm64v8,linux/arm32v7"
+  DOCKER_PLATFORMS: "linux/amd64,linux/arm64"
   FPM_VERSION: 1.15.1
 
 jobs:
