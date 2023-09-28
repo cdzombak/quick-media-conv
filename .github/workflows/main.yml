@@ -263,17 +263,18 @@ jobs:
 
 
   packagecloud_index:
-    name: Wait for PackageCloud .deb indexing
+    name: Wait for PackageCloud .deb Index
     needs: [meta, packagecloud]
     if: needs.meta.outputs.is_running_version_tag_update != 'true'
     runs-on: ubuntu-latest
     steps:
-      - shell: bash
+      - name: Wait loop...
+        shell: bash
         run: |
           ATTEMPTS=1
           MAX_ATTEMPTS=30  # with an attempt every 30s, 30 attempts == 15 minutes
           until curl -s -L https://packagecloud.io/${{ needs.meta.outputs.packagecloud_owner }}/${{ needs.meta.outputs.packagecloud_repo }}/any/dists/any/main/binary-amd64/Packages | grep -c "Filename: pool/any/main/q/quick-media-conv/quick-media-conv_${{ needs.meta.outputs.bin_version }}_all.deb" >/dev/null; do
-              printf '.'
+              echo "..."
               ATTEMPTS=$((ATTEMPTS+1))
               if [ $ATTEMPTS -eq $MAX_ATTEMPTS ]; then
                 echo "Waiting for PackageCloud .deb indexing timed out."
