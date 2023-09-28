@@ -1,0 +1,10 @@
+-s dir
+--name quick-media-conv
+--description "Scripts for quick ffmpeg/imagemagick conversions"
+--url "https://github.com/cdzombak/listening"
+--maintainer "Chris Dzombak <https://www.dzombak.com>"
+--license LGPL3
+--depends bash
+--depends ffmpeg
+--depends imagemagick
+--architecture all

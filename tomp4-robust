@@ -1,13 +1,40 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+PROGRAMNAME=$(basename "$0")
+PROGRAMVERSION="<dev>"
+PROGRAMDESC="Convert videos to mp4/x264/aac, using moderate quality settings. This program attempts to configure ffmpeg to produce an acceptable result from a malformed input file; use it if tomp4[-hq] produces ffmpeg errors."
+
+USAGE() {
+	echo "usage: $PROGRAMNAME [-h|-v] FILE1 [FILE2 ...]"
+	echo "$PROGRAMDESC"
+	echo ""
+	echo "  -h, --help:"
+	echo "  	Print help and exit."
+	echo "  -v, --version:"
+	echo "  	Print version and exit."
+	echo ""
+	echo "$PROGRAMNAME version $PROGRAMVERSION"
+	echo "https://github.com/cdzombak/quick-media-conv"
+}
+
+VERSION() {
+	echo "$PROGRAMNAME version $PROGRAMVERSION"
+}
+
 if [ "$#" -eq 0 ]; then
-	echo "[!] Pass input file names as arguments."
-	exit 2
+	USAGE
+	exit 1
+elif [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
+	USAGE
+	exit 0
+elif [ "$1" = "-v" ] || [ "$1" = "--version" ] ; then
+	VERSION
+	exit 0
 fi
 
-for infname in "$@"
-do
-	echo "$infname ..."
-	ffmpeg -i "$infname" -vf "pad=ceil(iw/2)*2:ceil(ih/2)*2" -max_muxing_queue_size 9999 -movflags faststart -pix_fmt yuv420p -preset slow -codec:a aac -codec:v libx264 -b:a 128k -crf 23 "$infname.mp4"
+for INFNAME in "$@"; do
+	echo "$INFNAME ..."
+	INFNAME_NOEXT=$(echo "$1" | rev | cut -f 2- -d '.' | rev)
+	ffmpeg -i "$INFNAME" -vf "pad=ceil(iw/2)*2:ceil(ih/2)*2" -max_muxing_queue_size 9999 -movflags faststart -pix_fmt yuv420p -preset slow -codec:a aac -codec:v libx264 -b:a 128k -crf 23 "$INFNAME_NOEXT.mp4"
 done

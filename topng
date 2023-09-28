@@ -1,14 +1,40 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+PROGRAMNAME=$(basename "$0")
+PROGRAMVERSION="<dev>"
+PROGRAMDESC="Convert images to png."
+
+USAGE() {
+	echo "usage: $PROGRAMNAME [-h|-v] FILE1 [FILE2 ...]"
+	echo "$PROGRAMDESC"
+	echo ""
+	echo "  -h, --help:"
+	echo "  	Print help and exit."
+	echo "  -v, --version:"
+	echo "  	Print version and exit."
+	echo ""
+	echo "$PROGRAMNAME version $PROGRAMVERSION"
+	echo "https://github.com/cdzombak/quick-media-conv"
+}
+
+VERSION() {
+	echo "$PROGRAMNAME version $PROGRAMVERSION"
+}
+
 if [ "$#" -eq 0 ]; then
-	echo "[!] Pass input file names as arguments."
-	exit 2
+	USAGE
+	exit 1
+elif [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
+	USAGE
+	exit 0
+elif [ "$1" = "-v" ] || [ "$1" = "--version" ] ; then
+	VERSION
+	exit 0
 fi
 
-for infname in "$@"
-do
-	outfname="$(echo "$infname" | rev | cut -d '.' -f2- | rev).png"
-	echo "$infname -> $outfname ..."
-	convert "$infname" "$outfname"
+for INFNAME in "$@"; do
+	OUTFNAME="$(echo "$INFNAME" | rev | cut -d '.' -f2- | rev).png"
+	echo "$INFNAME -> $OUTFNAME ..."
+	convert "$INFNAME" "$OUTFNAME"
 done

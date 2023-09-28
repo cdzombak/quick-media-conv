@@ -1,0 +1,19 @@
+# https://megalinter.io/configuration/
+
+---
+APPLY_FIXES: all
+DISABLE:
+  - SPELL
+DISABLE_LINTERS:
+  - DOCKERFILE_HADOLINT
+  - MAKEFILE_CHECKMAKE
+  - REPOSITORY_KICS
+  - REPOSITORY_TRIVY
+PLUGINS:
+  - https://raw.githubusercontent.com/shiranr/linkcheck/main/mega-linter-plugin-linkcheck/linkcheck.megalinter-descriptor.yml
+  - https://raw.githubusercontent.com/cdzombak/mega-linter-plugin-dockerfilelint/main/mega-linter-plugin-dockerfilelint/dockerfilelint.megalinter-descriptor.yml
+
+VALIDATE_ALL_CODEBASE: true
+SHOW_ELAPSED_TIME: false
+FILEIO_REPORTER: false
+PRINT_ALPACA: false
