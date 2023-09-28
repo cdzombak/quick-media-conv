@@ -5,7 +5,11 @@ Scripts for quick ffmpeg/imagemagick conversions on Linux & macOS. These scripts
 ## Usage
 
 ```text
-TKTK
+flv2mp4 [OPTIONS] file1 [file2 ...]
+toalac [OPTIONS] file1 [file2 ...]
+tom4a [OPTIONS] file1 [file2 ...]
+tomp4[-hq|-robust] [OPTIONS] file1 [file2 ...]
+topng [OPTIONS] file1 [file2 ...]
 ```
 
 ### Options
@@ -14,10 +18,6 @@ All scripts accept the following options:
 
 - `-h`, `--help`: Print help and exit.
 - `-v`, `--version`: Print version and exit.
-
-## Docker
-
-TKTK
 
 ## Installation
 
@@ -52,6 +52,28 @@ make build
 ```
 
 Then copy the resulting files from `out/` to your desired installation path.
+
+## Docker
+
+Docker images are available for amd64 and arm64 from Docker Hub and GHCR:
+
+```shell
+docker pull cdzombak/quick-media-conv:1
+docker pull ghcr.io/cdzombak/quick-media-conv:1
+```
+
+Commands within the container run in the `/work` directory, so take care to map this volume to the directory on your machine containing media files, and pass filenames to the container's command appropriately. Sample usage:
+
+```text
+$ ls mediafiles/
+file1.webm  file2.flac
+
+$ docker run --rm -v ./mediafiles:/work cdzombak/quick-media-conv:1 tomp4 file1.webm
+$ docker run --rm -v ./mediafiles:/work cdzombak/quick-media-conv:1 toalac file2.flac
+
+$ ls mediafiles/
+file1.webm  file1.mp4  file2.flac  file2.alac
+```
 
 ## About
 
