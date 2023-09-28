@@ -104,7 +104,7 @@ jobs:
 
   binaries:
     name: Binaries & Debian Packages
-    needs: [meta]
+    needs: [meta, lint]
     if: needs.meta.outputs.is_running_version_tag_update != 'true'
     runs-on: ubuntu-latest
 
