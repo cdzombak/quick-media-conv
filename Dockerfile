@@ -2,10 +2,12 @@ ARG BIN_VERSION=<unknown>
 
 FROM ubuntu:jammy
 
-RUN curl -s https://packagecloud.io/install/repositories/cdzombak/oss/script.deb.sh?any=true | bash \
-    && apt-get update \
+RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends -y \
-       bash ffmpeg imagemagick quick-media-conv=${BIN_VERSION} \
+         bash curl ffmpeg imagemagick \
+    && curl -s https://packagecloud.io/install/repositories/cdzombak/oss/script.deb.sh?any=true | bash \
+    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends -y \
+         quick-media-conv=${BIN_VERSION} \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
