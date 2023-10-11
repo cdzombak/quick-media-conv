@@ -35,6 +35,6 @@ fi
 
 for INFNAME in "$@"; do
 	echo "$INFNAME ..."
-	INFNAME_NOEXT=$(echo "$1" | rev | cut -f 2- -d '.' | rev)
+	INFNAME_NOEXT=$(echo "$INFNAME" | rev | cut -f 2- -d '.' | rev)
 	ffmpeg -i "$INFNAME" -c:v libx264 -crf 23 -c:a aac -q:a 100 "$INFNAME_NOEXT.mp4"
 done
