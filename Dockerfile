@@ -4,7 +4,9 @@ ARG BIN_VERSION=<unknown>
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends -y \
          ca-certificates curl \
-    && curl -s https://packagecloud.io/install/repositories/cdzombak/oss/script.deb.sh?any=true | bash \
+    && curl -s https://dist.cdzombak.net/repo_signing.key | apt-key add - \
+    && echo -e "deb https://dist.cdzombak.net/deb/oss any oss\n" | tee /etc/apt/sources.list.d/dist-cdzombak-net.list \
+    && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends -y \
          quick-media-conv="${BIN_VERSION}" ffmpeg imagemagick \
     && apt-get clean \
