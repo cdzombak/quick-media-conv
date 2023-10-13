@@ -55,7 +55,7 @@ jobs:
       brewtap_formula_dir: formula
       aptly_repo_name: oss
       aptly_dist: any
-      aptly_publish_to: s3:dist.cdzombak.net:oss-any/any
+      aptly_publish_prefix: s3:dist.cdzombak.net:deb_oss
       is_prerelease: >-
         ${{
           steps.running_version_tag.outputs.is_running_version_tag_update != 'true' &&
@@ -211,25 +211,25 @@ jobs:
       - name: Push to Aptly Repo
         shell: bash
         run: |
-          set -x # debugging
+          set -x
           for DEB in out/*.deb; do
             curl -u "${{ secrets.APTLY_CRED }}" \
-              -X POST --fail \
+              -X POST --fail -s \
               -F file=@"${DEB}" \
               "${{ secrets.APTLY_API }}/files/${{ needs.meta.outputs.project_name }}-${{ needs.meta.outputs.bin_version }}"
           done
           curl -u "${{ secrets.APTLY_CRED }}" \
-            -X POST --fail \
+            -X POST --fail -s \
             "${{ secrets.APTLY_API }}/repos/${{ needs.meta.outputs.aptly_repo_name }}/file/${{ needs.meta.outputs.project_name }}-${{ needs.meta.outputs.bin_version }}?forceReplace=1"
 
       - name: Update Published Aptly Repo
         run: |
-          set -x # debugging
+          set -x
           curl -u "${{ secrets.APTLY_CRED }}" \
-            -X PUT --fail \
+            -X PUT --fail -s \
             -H 'Content-Type: application/json' \
             --data '{"ForceOverwrite": true}' \
-            "${{ secrets.APTLY_API }}/publish/${{ needs.meta.outputs.aptly_publish_to }}/${{ needs.meta.outputs.aptly_dist }}?_async=true"
+            "${{ secrets.APTLY_API }}/publish/${{ needs.meta.outputs.aptly_publish_prefix }}/${{ needs.meta.outputs.aptly_dist }}?_async=true"
 
   homebrew:
     name: Update Homebrew Tap
