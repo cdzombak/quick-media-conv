@@ -214,19 +214,19 @@ jobs:
           set -x
           for DEB in out/*.deb; do
             curl -u "${{ secrets.APTLY_CRED }}" \
-              -X POST --fail -s \
+              -fsS -X POST \
               -F file=@"${DEB}" \
               "${{ secrets.APTLY_API }}/files/${{ needs.meta.outputs.project_name }}-${{ needs.meta.outputs.bin_version }}"
           done
           curl -u "${{ secrets.APTLY_CRED }}" \
-            -X POST --fail -s \
+            -fsS -X POST \
             "${{ secrets.APTLY_API }}/repos/${{ needs.meta.outputs.aptly_repo_name }}/file/${{ needs.meta.outputs.project_name }}-${{ needs.meta.outputs.bin_version }}?forceReplace=1"
 
       - name: Update Published Aptly Repo
         run: |
           set -x
           curl -u "${{ secrets.APTLY_CRED }}" \
-            -X PUT --fail -s \
+            -fsS -X PUT \
             -H 'Content-Type: application/json' \
             --data '{"ForceOverwrite": true}' \
             "${{ secrets.APTLY_API }}/publish/${{ needs.meta.outputs.aptly_publish_prefix }}/${{ needs.meta.outputs.aptly_dist }}?_async=true"
@@ -279,7 +279,7 @@ jobs:
         run: |
           ATTEMPTS=1
           MAX_ATTEMPTS=30  # with an attempt every 30s, 30 attempts == 15 minutes
-          until curl --fail -s -L https://dist.cdzombak.net/deb/oss/dists/any/oss/binary-amd64/Packages | grep -c "Filename: .*${{ needs.meta.outputs.project_name }}-${{ needs.meta.outputs.bin_version }}-all.deb" >/dev/null; do
+          until curl -fsSL https://dist.cdzombak.net/deb/oss/dists/any/oss/binary-amd64/Packages | grep -c "Filename: .*${{ needs.meta.outputs.project_name }}-${{ needs.meta.outputs.bin_version }}-all.deb" >/dev/null; do
               echo "..."
               ATTEMPTS=$((ATTEMPTS+1))
               if [ $ATTEMPTS -eq $MAX_ATTEMPTS ]; then

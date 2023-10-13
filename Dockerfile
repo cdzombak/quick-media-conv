@@ -2,13 +2,17 @@ FROM ubuntu:jammy
 ARG BIN_VERSION=<unknown>
 
 RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends -y \
-         ca-certificates curl \
-    && curl -s https://dist.cdzombak.net/repo_signing.key | apt-key add - \
-    && echo -e "deb https://dist.cdzombak.net/deb/oss any oss\n" | tee /etc/apt/sources.list.d/dist-cdzombak-net.list \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        ca-certificates curl gnupg \
+    && install -m 0755 -d /etc/apt/keyrings \
+    && curl -fsSL https://dist.cdzombak.net/deb.key | gpg --dearmor -o /etc/apt/keyrings/dist-cdzombak-net.gpg \
+    && chmod 0644 /etc/apt/keyrings/dist-cdzombak-net.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/dist-cdzombak-net.gpg] https://dist.cdzombak.net/deb/oss any oss" | tee /etc/apt/sources.list.d/dist-cdzombak-net.list > /dev/null \
     && apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
          quick-media-conv="${BIN_VERSION}" ffmpeg imagemagick \
+    && apt-get purge -y gnupg \
+    && apt-get autoremove -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
