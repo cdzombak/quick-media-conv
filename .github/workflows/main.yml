@@ -279,7 +279,7 @@ jobs:
         run: |
           ATTEMPTS=1
           MAX_ATTEMPTS=30  # with an attempt every 30s, 30 attempts == 15 minutes
-          until curl --fail -s -L https://dist.cdzombak.net/deb/oss/dists/any/oss/binary-amd64/Packages | grep -c "Filename: pool/any/main/q/quick-media-conv/quick-media-conv_${{ needs.meta.outputs.bin_version }}_all.deb" >/dev/null; do
+          until curl --fail -s -L https://dist.cdzombak.net/deb/oss/dists/any/oss/binary-amd64/Packages | grep -c "Filename: .*${{ needs.meta.outputs.project_name }}-${{ needs.meta.outputs.bin_version }}-all.deb" >/dev/null; do
               echo "..."
               ATTEMPTS=$((ATTEMPTS+1))
               if [ $ATTEMPTS -eq $MAX_ATTEMPTS ]; then
