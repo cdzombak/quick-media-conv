@@ -30,6 +30,7 @@ brew install cdzombak/oss/quick-media-conv
 ### Debian via apt repository
 
 Install my Debian repository if you haven't already:
+
 ```shell
 sudo apt-get install ca-certificates curl gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
@@ -40,6 +41,7 @@ sudo apt-get update
 ```
 
 Then install `quick-media-conv` via `apt-get`:
+
 ```shell
 sudo apt-get install quick-media-conv
 ```
@@ -84,7 +86,7 @@ file1.webm  file1.mp4  file2.flac  file2.alac
 
 - Issues: https://github.com/cdzombak/quick-media-conv/issues/new
 - Author: [Chris Dzombak](https://www.dzombak.com)
-    - [GitHub: @cdzombak](https://www.github.com/cdzombak)
+  - [GitHub: @cdzombak](https://www.github.com/cdzombak)
 
 ## License
 
