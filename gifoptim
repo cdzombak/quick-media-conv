@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PROGRAMNAME=$(basename "$0")
+PROGRAMVERSION="<dev>"
+PROGRAMDESC="Optimize the given animated GIFs."
+
+USAGE() {
+	echo "usage: $PROGRAMNAME [-h|-v] FILE1 [FILE2 ...]"
+	echo "$PROGRAMDESC"
+	echo ""
+	echo "  -h, --help:"
+	echo "  	Print help and exit."
+	echo "  -v, --version:"
+	echo "  	Print version and exit."
+	echo ""
+	echo "$PROGRAMNAME version $PROGRAMVERSION"
+	echo "https://github.com/cdzombak/quick-media-conv"
+}
+
+VERSION() {
+	echo "$PROGRAMNAME version $PROGRAMVERSION"
+}
+
+if [ "$#" -eq 0 ]; then
+	USAGE
+	exit 1
+elif [ "$1" = "-h" ] || [ "$1" = "--help" ] ; then
+	USAGE
+	exit 0
+elif [ "$1" = "-v" ] || [ "$1" = "--version" ] ; then
+	VERSION
+	exit 0
+fi
+
+for INFNAME in "$@"; do
+	OUTFNAME="$(echo "$INFNAME" | rev | cut -d '.' -f2- | rev).optim.gif"
+	echo "$INFNAME -> $OUTFNAME ..."
+	gifsicle -i "$INFNAME" --optimize=3 --lossy -o "$OUTFNAME"
+done
