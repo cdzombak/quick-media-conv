@@ -52,7 +52,7 @@ jobs:
       ghcr_owner: ${{ github.repository_owner }}
       brewtap_owner: ${{ github.repository_owner }}
       brewtap_name: oss
-      brewtap_formula_dir: formula
+      brewtap_formula_dir: Formula
       aptly_repo_name: oss
       aptly_dist: any
       aptly_publish_prefix: s3:dist.cdzombak.net:deb_oss
