@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Derive version string
         id: bin_version
         run: echo "bin_version=$(./.version.sh)" >> "$GITHUB_OUTPUT"
@@ -85,15 +85,15 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Run MegaLinter
-        uses: oxsecurity/megalinter@v7
+        uses: oxsecurity/megalinter@v9
         env:
           # See https://megalinter.io/configuration and .mega-linter.yml
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Archive MegaLinter artifacts
         if: ( !env.ACT && ( success() || failure() ) )
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MegaLinter artifacts
           path: |
@@ -108,7 +108,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -134,7 +134,7 @@ jobs:
             ./*-${{ needs.meta.outputs.bin_version }}-all
           echo "tgz_sha256_allarch=$(shasum -a 256 ./gh-release/${{ needs.meta.outputs.project_name }}-${{ needs.meta.outputs.bin_version }}-all.tar.gz  | cut -d " " -f 1)" >> "$GITHUB_OUTPUT"
       - name: Upload binaries & packages
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ needs.meta.outputs.project_name }} Binary Artifacts
           path: out/gh-release/*
@@ -153,7 +153,7 @@ jobs:
       contents: write
     steps:
       - name: Download binaries & packages
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v5
         with:
           name: ${{ needs.meta.outputs.project_name }} Binary Artifacts
           path: gh-release
@@ -161,7 +161,7 @@ jobs:
         working-directory: gh-release
         run: ls -R
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: gh-release/*
           prerelease: ${{ needs.meta.outputs.is_prerelease == 'true' }}
@@ -177,7 +177,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Update running major/minor version tags
         uses: sersoft-gmbh/running-release-tags-action@v3
         with:
@@ -192,7 +192,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download binaries & packages
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v5
         with:
           name: ${{ needs.meta.outputs.project_name }} Binary Artifacts
           path: out
@@ -201,7 +201,7 @@ jobs:
         working-directory: out
 
       - name: Login to Tailscale
-        uses: tailscale/github-action@v2
+        uses: tailscale/github-action@v3
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
@@ -237,12 +237,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: src
 
       - name: Checkout ${{ needs.meta.outputs.brewtap_owner }}/${{ needs.meta.outputs.brewtap_name }} tap repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: brewtap
           repository: ${{ needs.meta.outputs.brewtap_owner }}/homebrew-${{ needs.meta.outputs.brewtap_name }}
@@ -298,7 +298,7 @@ jobs:
       packages: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Login to GHCR
         if: needs.meta.outputs.is_pull_request != 'true'
@@ -342,7 +342,7 @@ jobs:
             type=semver,pattern={{major}}
 
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
@@ -356,7 +356,7 @@ jobs:
 
       - name: Update Docker Hub description
         if: needs.meta.outputs.is_release == 'true'
-        uses: peter-evans/dockerhub-description@v3
+        uses: peter-evans/dockerhub-description@v4
         with:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
